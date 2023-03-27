@@ -1,10 +1,13 @@
-all: badge.kicad_sch.pdf badge.kicad_sch.html badge.kicad_sch.jlc.csv gerbers/badge-Edge_Cuts.gm1
+all: badge.kicad_sch.pdf badge.kicad_sch.html badge.kicad_pcb.step badge.kicad_sch.jlc.csv gerbers/badge-Edge_Cuts.gm1
 
 %.kicad_sch.pdf : %.kicad_sch
 	kicad-cli sch export pdf $< -o $@
 
 %.kicad_sch.xml : %.kicad_sch
 	kicad-cli sch export python-bom --output $@ $<
+
+%.kicad_pcb.step : %.kicad_pcb
+	kicad-cli pcb export step --board-only -o $@ $<
 
 %.kicad_sch.html : %.kicad_sch.xml
 	python3 /home/tom/.kicad/scripting/plugins/bom_html_grouped_by_value.py $< $(CURDIR)/$@
